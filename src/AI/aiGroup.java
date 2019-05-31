@@ -41,6 +41,10 @@ public class aiGroup {
             i.draw(window);
         }
     }
+    
+    public void addCar(Car car){
+        group.add(car);
+    }
 
     public void moveAll() {
         for (Car i : getGroup()) {
