@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Racer extends Canvas implements KeyListener, Runnable {
@@ -31,9 +32,7 @@ public class Racer extends Canvas implements KeyListener, Runnable {
     private static final int HEIGHT = 600;
     private Car car;
     private aiGroup ai;
-    private FileWriter writer=null;
-    
-
+    private FileWriter writer = null;
 
     /* uncomment once you are ready for this part
      *
@@ -45,19 +44,26 @@ public class Racer extends Canvas implements KeyListener, Runnable {
     private Wall wall;
 
     public Racer(int cars) throws IOException {
-        File file= new File("output.txt");
-        Scanner sc = new Scanner(file);
-
+        File tmpDir = new File("output.txt");
+        ArrayList<Integer> turns = new ArrayList<>();
         wall = new Wall();
         ai = new aiGroup(cars);
-        ArrayList<Integer> turns = new ArrayList<>();
+        turns.add(1);
+        if(tmpDir.exists()){
+        File file = new File("output.txt");
+
+        Scanner sc = new Scanner(file);
+
+
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
-            if(line.equals("-1")||line.equals("1"))
-            turns.add(Integer.parseInt(sc.nextLine()));
+            if (line.equals("-1") || line.equals("1")) {
+                turns.add(Integer.parseInt(sc.nextLine()));
+            }
         }
-        
-        ai.addCar(new Car(100, 135, 30, 1, 1, Color.getHSBColor(1f, 1f, .5f),turns,turns,50));
+        }
+
+        //ai.addCar(new Car(100, 135, 30, 1, 1, Color.getHSBColor(1f, 1f, .5f)));
         car = new Car(100, 100, 1, 1, 1, Color.white);
         setBackground(Color.black);
 
@@ -67,7 +73,7 @@ public class Racer extends Canvas implements KeyListener, Runnable {
         new Thread(this).start();
 
         setVisible(true);
-        writer =new FileWriter("output.txt");
+        writer = new FileWriter("output.txt");
     }
 
     public void update(Graphics window) {
